@@ -134,6 +134,7 @@ app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
 ################################################ SESSION VARIABLES ####################################################
 call_count : int = 0 # Keep track of call_count
 is_first_eleven_labs_connection : bool = True # Default state
+is_first_transcript_recieved : bool = False
 
 ################################################ WEBSOCKET ############################################################
 @app.websocket("/audiostream/{call_sid}")
@@ -185,7 +186,7 @@ async def audio_stream(websocket: WebSocket, call_sid: str):
     close_message = json.dumps({"type": "CloseStream"})
     last_transcript_chunk = ""
     user_transcribed_input = ""
-    connect_deepgram_ws = False
+    first_iter = True
 
     try:
         async with websockets.connect(uri=DEEPGRAM_URI, extra_headers=HEADERS) as deepgram_ws:
@@ -195,6 +196,7 @@ async def audio_stream(websocket: WebSocket, call_sid: str):
                 async def receive_deepgram_transcripts():
                     """ Receives and processes transcripts from the Deepgram speech-to-text service. """
                     nonlocal last_transcript_chunk
+                    global is_first_transcript_recieved
                     logger.info("Entered receive_deepgram_transcripts")
                     try:
                         #async for message in deepgram_ws:
@@ -224,6 +226,10 @@ async def audio_stream(websocket: WebSocket, call_sid: str):
                                     transcript = data["channel"]["alternatives"][0]["transcript"]
                                     logger.info("Recieved transcript from Deepgram websocket...")
                                     #if transcript.strip():
+                                    if is_first_transcript_recieved == False:
+                                        transcribe_end = time.time()
+                                        logger.info(f"Transcription latency: {transcribe_end-transcribe_start}")
+                                        is_first_transcript_recieved = True  
                                     agent.transcripts.append(transcript)
                                     logger.info(f"Transcribed input: {transcript}")
                                 else:
@@ -326,10 +332,11 @@ async def audio_stream(websocket: WebSocket, call_sid: str):
                 eleven_labs_ws = await initialise_eleven_labs_websocket()
 
                 while True:
-                    if connect_deepgram_ws:
+                    if not first_iter:
                         deepgram_ws = await deepgram_connection_task
                     user_transcribed_input = ""
                     logger.info("Transcribing...")
+                    transcribe_start = time.time()
                     try:
                         receiver_task = asyncio.create_task(receive_deepgram_transcripts())
                         sender_task = asyncio.create_task(forward_audio_to_deepgram())
@@ -387,9 +394,6 @@ async def audio_stream(websocket: WebSocket, call_sid: str):
                             eleven_labs_ws = await eleven_labs_connection_task
                             agent.use_cache = False
                             await agent.process_input(eleven_labs_websocket=eleven_labs_ws, websocket_server=websocket, user_input=user_transcribed_input, cached_response=None)
-                        except WebSocketDisconnect:
-                            logger.error(f"Error in WebSocket: Websocket Disconnected")
-                            raise WebSocketDisconnect
                         except Exception as e:
                             logger.error(f"Error occured while processing input: {e}")
                             raise Exception
@@ -512,7 +516,6 @@ async def audio_stream(websocket: WebSocket, call_sid: str):
                 
                    # After all tasks are completed, update agent response and reset queue manager for next conversation
                     deepgram_connection_task = asyncio.create_task(initialise_deepgram_ws())
-                    await agent.mark_event_future
                     update_agent_response_start_time = time.time()
                     agent.update_agent_response()
                     update_agent_response_end_time = time.time()
@@ -521,7 +524,7 @@ async def audio_stream(websocket: WebSocket, call_sid: str):
                     await agent.reset_after_interaction()
                     reset_interaction_end_time = time.time()
                     logger.info(f"Reset interaction for next conversation: {reset_interaction_end_time-reset_interaction_start_time} seconds")
-                    connect_deepgram_ws = True
+                    first_iter = False
                     
                     if agent.stop_signal:
                         reset_for_next_call()
