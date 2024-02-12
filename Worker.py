@@ -373,3 +373,9 @@ class AIAgent():
         self.post_audio_tasks.clear()
         self.use_cache = False
         # Reset other state variables or events as necessary
+        """Resets the agent's state after each interaction round"""
+        self.audio_start_event.clear()  # Reset the event for the next interaction
+        self.is_first_audio_chunk_sent = False
+        self.post_audio_tasks.clear()
+        self.use_cache = False
+        # Reset other state variables or events as necessary
