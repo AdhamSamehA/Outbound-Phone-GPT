@@ -21,7 +21,7 @@ BASE_GPT_TURBO_MODEL : str = "gpt-3.5-turbo-0125"
 
 # Configure Eleven Labs
 ELEVEN_LABS_API_KEY : str = os.getenv('ELEVEN_LABS_API_KEY')
-VOICE_ID : str = os.getenv('ELEVEN_LABS_VOICE_ID_MYRA')
+VOICE_ID : str = os.getenv('ELEVEN_LABS_VOICE_ID')
 MODEL_ID : str = os.getenv('ELEVEN_LABS_TURBO_MODEL_ID')
 STREAMING_LATENCY_VAL : str = '4'
 ENABLE_SSML_PARSE : bool = True
