@@ -165,20 +165,18 @@ async def audio_stream(websocket: WebSocket, call_sid: str):
     await agent.connect_to_twilio_bidirectional_stream(websocket)
 
     async def play_welcome_message():
-        """ Streams a welcome message audio file to the WebSocket connection. """
+        """Streams a welcome message audio file to the WebSocket connection."""
         chunk_size = 1024  # Adjust based on your needs
-        with open(agent.welcome_file_path, 'rb') as audio_file:
-            while audio_chunk := audio_file.read(chunk_size):
-                if audio_chunk is not None:
-                    logger.info(f"Audio data : {audio_chunk[:10]} - Length: {len(audio_chunk)} bytes")
-                    post_audio_task = asyncio.ensure_future(agent.post_audio_to_websocket(audio_chunk, websocket_server=websocket))
-                    agent.post_audio_tasks.append(post_audio_task)
-                else:
-                    logger.warning("listen_eleven_labs: Recieved empty audio chunk")
-                    continue
-        await asyncio.gather(*agent.post_audio_tasks)
-        await agent.send_mark_message(websocket_server=websocket)
-    
+        try:
+            with open(agent.welcome_file_path, 'rb') as audio_file:
+                while (audio_chunk := audio_file.read(chunk_size)):
+                    logger.info(f"Streaming audio chunk: {audio_chunk[:10]} - Length: {len(audio_chunk)} bytes")
+                    await agent.post_audio_to_websocket(audio_chunk, websocket_server=websocket)
+        except Exception as e:
+            logger.error(f"Error in play_welcome_message: {e}")
+        finally:
+            await agent.send_mark_message(websocket_server=websocket)
+        
     welcome_message_task = asyncio.create_task(play_welcome_message())
     logger.info("Welcome message task has been created...")
 
