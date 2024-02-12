@@ -119,7 +119,8 @@ Run `app.py` to initiate the server
 
 `/make-call`
 
-Initiates an outbound call. Can accept a JSON with a custom 'welcome_message'.
+Initiates an outbound call. Can accept a JSON with a custom 'welcome_message'. If you send an empty JSON, make sure 
+that a `default-starter.wav` file exists within your audio files directory.
 ``` json
 {}  // For default welcome message
 {"welcome_message": "Hello, this is Myra from Escade Networks."}
