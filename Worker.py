@@ -23,8 +23,11 @@ import time
 import os
 from typing import Optional, AsyncGenerator
 
-# Import utils.py
+# Import utils
 from __utils__ import text_chunker, get_cached_streaming_generator, LRUCache
+
+# Import configs
+from __config__ import AGENT_CACHE_FILE
 
 # Import sales agent framework (SalesGPT)
 from ConversationModel.agents import ConversationalModel
@@ -69,7 +72,7 @@ class AIAgent():
         self.user_transcribed_input : str = ""
         self.transcripts = []
 
-        self.lru_cache = LRUCache(capacity=1000, cache_file_path=f'{os.getcwd()}/cache_files/myra.pkl')
+        self.lru_cache = LRUCache(capacity=1000, cache_file_path=AGENT_CACHE_FILE)
 
         self.streaming_generator_future: Optional[asyncio.Future]
         self.mark_event_future = Optional[asyncio.Future]
@@ -367,12 +370,6 @@ class AIAgent():
 
 ################################################ RESETING AGENT FOR NEXT CONVERSATION ###############################################
     async def reset_after_interaction(self):
-        """Resets the agent's state after each interaction round"""
-        self.audio_start_event.clear()  # Reset the event for the next interaction
-        self.is_first_audio_chunk_sent = False
-        self.post_audio_tasks.clear()
-        self.use_cache = False
-        # Reset other state variables or events as necessary
         """Resets the agent's state after each interaction round"""
         self.audio_start_event.clear()  # Reset the event for the next interaction
         self.is_first_audio_chunk_sent = False
