@@ -516,6 +516,7 @@ async def audio_stream(websocket: WebSocket, call_sid: str):
                 
                    # After all tasks are completed, update agent response and reset queue manager for next conversation
                     deepgram_connection_task = asyncio.create_task(initialise_deepgram_ws())
+                    await agent.mark_event_future
                     update_agent_response_start_time = time.time()
                     agent.update_agent_response()
                     update_agent_response_end_time = time.time()
