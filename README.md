@@ -23,7 +23,7 @@ This project is licensed under the GPL License - see the [LICENSE](LICENSE) file
 - Outside the US: If you're not in the US, like in the Middle East and North Africa (MENA) region, response times might be a bit longer. For instance, in the MENA region, it can take anywhere between 0.7-1.4 seconds just for the first part of the response from Open AI to start coming through ([Text-To-Text Latency In MENA](./resources/images/GPT-Response-Latency.png))
 
 
-- Overall Performance: Even though the time it takes to get the first part of Open AI's response can vary depending on your location, the Outbound Phone GPT system as a whole is built to streamline the speech to speech process with a big emphasis on latency optimisations. This means that, despite the extra steps involved in delivering a realistic human-like outboun call, the system is able to provide responses in as little as ~1.5 seconds ([Speech-To-Speech Latency In MENA](./resources/images/Agent-On-Call-Response-Latency.png))
+- Overall Performance: Even though the time it takes to get the first part of Open AI's response can vary depending on your location, the Outbound Phone GPT system as a whole is built to streamline the speech to speech process with a big emphasis on latency optimisation. This means that, despite the extra steps involved in delivering a realistic human-like outbound call, the system is able to provide responses in as little as ~1.5 seconds ([Speech-To-Speech Latency In MENA](./resources/images/Agent-On-Call-Response-Latency.png))
 
 
 ## Technologies and External APIs
