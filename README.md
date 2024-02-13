@@ -1,6 +1,6 @@
 # Outbound Phone GPT
 
-Outbound Phone GPT is a sophisticated prototype for a context-aware agent designed to autonomously handle outbound phone calls through Twilio. Leveraging the power of asynchronous programming, this agent seamlessly integrates text generation from OpenAI, transcription from Deepgram, and voice generation from Eleven Labs, providing a seamless and efficient communication experience.
+Outbound Phone GPT is a sophisticated prototype for a context-aware agent designed to autonomously handle outbound phone calls through Twilio. The system is built on core principles of asynchronous programming to enable real-time speech-to-speech communication.
 
 ## License
 
@@ -28,11 +28,12 @@ This project is licensed under the GPL License - see the [LICENSE](LICENSE) file
 
 ## Technologies and External APIs
 
-- FastAPI: For creating REST APIs with Python.
+- FastAPI: For creating Outbound Phone GPT's API
 - WebSockets: For real-time bidirectional communication.
 - Twilio's API: For phone call management.
 - Deepgram: For real-time speech recognition.
 - Eleven Labs: For dynamic and natural-sounding voice synthesis.
+- Langchain: For building the core logic of the conversational agent
 - Baby AGI framework inspired by Filip Michalsky's SalesGPT -> https://github.com/filip-michalsky/SalesGPT
 
 ## Setup and Installation
