@@ -30,7 +30,7 @@ from typing import List, Tuple
 from __utils__ import add_to_list, generate_audio_file
 
 # Import config.py
-from __config__ import ACCOUNT_SID, AUTH_TOKEN, TWILIO_NUM, HTTP_SERVER_PORT, WEBSOCKET_SUBDOMAIN, BASE_WEBSOCKET_URL, SECRET_KEY, LOCAL_HOST, AGENT_AUDIO_FOLDER, DEEPGRAM_URI, HEADERS, ELEVEN_LABS_URI, VOICE_SETTINGS, ELEVEN_LABS_API_KEY, DEFAULT_MESSAGE, AGENT_CACHE_FILE, LABEL_TO_FILLER
+from __config__ import ACCOUNT_SID, AUTH_TOKEN, TWILIO_NUM, HTTP_SERVER_PORT, WEBSOCKET_SUBDOMAIN, BASE_WEBSOCKET_URL, SECRET_KEY, NGROK_HTTPS_URL, AGENT_AUDIO_FOLDER, DEEPGRAM_URI, HEADERS, ELEVEN_LABS_URI, VOICE_SETTINGS, ELEVEN_LABS_API_KEY, DEFAULT_MESSAGE, AGENT_CACHE_FILE, LABEL_TO_FILLER
 
 # Import FastAPI libraries
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -368,6 +368,8 @@ async def audio_stream(websocket: WebSocket, call_sid: str):
                         
                     user_transcribed_input = " ".join(agent.transcripts) or DEFAULT_MESSAGE
                     logger.info(f'Complete transcription collected: {user_transcribed_input}')
+
+                    asyncio.ensure_future(deepgram_ws.send(close_message))
                    
                     # Handling speech generation
                     logger.info("Responding...")
@@ -683,6 +685,6 @@ async def update_cache(kv_data_list: list[KeyValueInput]):
 
 
 if __name__ == '__main__':   
-    logger.info(f"Server listening on: {LOCAL_HOST}")
-    logger.info(f"WebSocket server active at: {BASE_WEBSOCKET_URL}/audiostream")
+    logger.info(f"Server listening on: {NGROK_HTTPS_URL}")
+    logger.info(f"WebSocket server active at: {BASE_WEBSOCKET_URL}/audiostream/.....")
     uvicorn.run(app, host='0.0.0.0', port=HTTP_SERVER_PORT)

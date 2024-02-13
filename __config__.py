@@ -49,8 +49,8 @@ DEFAULT_MESSAGE : str = "Sorry, can you repeat that again?" # This will the defa
 
 # Configure your server using Ngrok: https://ngrok.com/docs/getting-started/
 HTTP_SERVER_PORT : int = 3000 
-LOCAL_HOST : str = os.getenv('NGROK_URL')
-WEBSOCKET_SUBDOMAIN : str = LOCAL_HOST.replace("https://", "")
+NGROK_HTTPS_URL : str = ''
+WEBSOCKET_SUBDOMAIN : str = NGROK_HTTPS_URL.replace("https://", "")
 BASE_WEBSOCKET_URL : str = f"wss://{WEBSOCKET_SUBDOMAIN}"
 
 # Define session management key

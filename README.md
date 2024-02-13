@@ -78,7 +78,8 @@ Create your `.env` file using `.env.example` as a template and add your keys
 
     First, you need to make a configuration file for your agent in JSON format. This file should include two main pieces of information: `prompt` and `agent_name`.
 
-    - `prompt` is like an instruction that tells your agent what to do and how to manage the call. Remember to include {conversation_history} in your prompt, which helps the agent to become context aware as well as the conversation stages
+    - `prompt` is like an instruction that tells your agent what to do and how to manage the call. Remember to include 
+    `{conversation_history}` in your prompt, to enable the agent's context awareness as well as the conversation stages
         which you've defined earlier.
     - `agent_name` is simply the name you want to give your agent.
     
@@ -99,8 +100,8 @@ Create your `.env` file using `.env.example` as a template and add your keys
 
 - **Step 4: Go to /ConversationModel/playground.py**
 
-Test your agent's configuration through a chat-like interface in the program's terminal. This is important as it allows you
-to refine your agent's configuration before setting up your agent to take phone calls.
+    Test your agent's configuration through a chat-like interface in the program's terminal. This is important as it allows you
+    to refine your agent's configuration before setting up your agent to take phone calls.
 
 ### 6) App Configuration:
     

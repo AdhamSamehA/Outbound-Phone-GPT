@@ -121,7 +121,8 @@ class ConversationalModel(Chain):
     @time_logger
     def determine_conversation_stage(self):
         """ Utilises the stage analyzer chain to determine the conversation stage based on the context of the call, 
-        pre-defined conversations stages and updated conversation history.
+        pre-defined conversations stages and updated conversation history. This method is currenty not being used
+        to minimise response latency.
         """
         self.conversation_stage_id = self.stage_analyzer_chain.run(
             conversation_history="\n".join(self.conversation_history).rstrip("\n"),
@@ -152,10 +153,12 @@ class ConversationalModel(Chain):
         """
         Helper function to prepare messages to be passed to a streaming generator.
         """
+        # Stage analyzer chain is not being used to minimise response latency
+        # self.determine_conversation_stage() # Uncomment to use the stage analyzer assistant
         prompt = self.conversation_chain.prep_prompts(
             [
                 dict(
-                    conversation_stage=self.current_conversation_stage,
+                    #conversation_stage=self.current_conversation_stage, # Uncomment to use the stage analyzer assistant
                     conversation_history="\n".join(self.conversation_history),
                     **self.merged_config
                 )
