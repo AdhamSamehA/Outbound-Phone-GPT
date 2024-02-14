@@ -1,3 +1,5 @@
+![Banner Alt Text](/resources/Project_Banner.png)
+
 # Outbound Phone GPT
 
 Outbound Phone GPT is a sophisticated prototype for a context-aware agent designed to autonomously handle outbound phone calls through Twilio. The system is built on core principles of asynchronous programming to enable real-time speech-to-speech communication.
