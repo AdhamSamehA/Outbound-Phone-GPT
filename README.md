@@ -1,4 +1,4 @@
-![Banner Alt Text](/resources/Project_Banner.png)
+![Outbound Phone GPT Banner](/resources/Project_Banner.png)
 
 # Outbound Phone GPT
 
